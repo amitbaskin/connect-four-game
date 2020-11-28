@@ -4,21 +4,19 @@ import java.awt.*;
 
 enum Piece {GRAY, RED, BLUE}
 
-public class SuperPanel extends JPanel{
+class SuperPanel extends JPanel{
     int PIECE_SIZE = 90;
     Piece type;
 
-    public SuperPanel(Piece type){
+    SuperPanel(Piece type){
         this.type = type;
     }
 
-    public void setType(Piece type) {
+    void setType(Piece type) {
         this.type = type;
     }
 
-    public Piece getType() {
-        return type;
-    }
+    Piece getType() { return type; }
 
     @Override
     protected void paintComponent(Graphics g) {

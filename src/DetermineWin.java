@@ -1,94 +1,126 @@
+import javax.swing.*;
+
 public abstract class DetermineWin {
+    private static final String WIN_MSG = "%s wins!";
+    private static final String NO_WINNER = "";
+    enum Direction {DOWN, RIGHT, LEFT, UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT}
 
-    enum Direction {UP, DOWN, RIGHT, LEFT, DIAG_UP_RIGHT, DIAG_UP_LEFT, DIAG_DOWN_RIGHT, DIAG_DOWN_LEFT}
+    static int countPieces(int row, int col, Piece type, Direction direction) {
 
-    public static int countPieces(int row, int col, Piece type, Direction direction){
-        boolean isColInc;
-        boolean isColDec;
-        boolean isRowInc;
-        boolean isRowDec;
+        int curRow;
+        int curCol;
+        int counter = 0;
 
-        switch (direction){
-            case UP:
-                isRowDec = true;
+        switch (direction) {
+
             case DOWN:
-                isRowInc = true;
-                break;
+                curRow = row + 1;
+                while (curRow < Gui.getRowsAmount()) {
+                    if (Gui.getSuperPanelFromLst(curRow, col).getType() == type) {
+                        counter++;
+                        curRow++;
+                    } else break;
+                } return counter;
+
             case RIGHT:
-                isColInc = true;
-                break;
+                curCol = col + 1;
+                while (curCol < Gui.getColsAmount()) {
+                    if (Gui.getSuperPanelFromLst(row, curCol).getType() == type) {
+                        counter++;
+                        curCol++;
+                    } else break;
+                } return counter;
+
+
             case LEFT:
-                isColDec = true;
-            case DIAG_UP_RIGHT:
-                isColInc = true;
-                isRowDec = true;
-                break;
-            case DIAG_UP_LEFT:
-                isColDec = true;
-                isRowDec = true;
-                break;
-            case DIAG_DOWN_RIGHT:
-                isColInc = true;
-                isRowInc = true;
-                break;
-            case DIAG_DOWN_LEFT:
-                isColDec = true;
-                isRowInc = true;
-                break;
+                curCol = col - 1;
+                while (curCol >= 0) {
+                    if (Gui.getSuperPanelFromLst(row, curCol).getType() == type) {
+                        counter++;
+                        curCol--;
+                    } else break;
+                }
+                return counter;
 
+            case UP_RIGHT:
+                curCol = col + 1;
+                curRow = row - 1;
+                while (curCol < Gui.getColsAmount() && curRow >= 0) {
+                    if (Gui.getSuperPanelFromLst(curRow, curCol).getType() == type) {
+                        counter++;
+                        curCol++;
+                        curRow--;
+                    } else break;
+                } return counter;
 
+            case UP_LEFT:
+                curCol = col - 1;
+                curRow = row - 1;
+                while (curCol >= 0 && curRow >= 0) {
+                    if (Gui.getSuperPanelFromLst(curRow, curCol).getType() == type) {
+                        counter++;
+                        curCol--;
+                        curRow--;
+                    } else break;
+                } return counter;
 
+            case DOWN_RIGHT:
+                curCol = col + 1;
+                curRow = row + 1;
+                while (curCol < Gui.getColsAmount() && curRow < Gui.getRowsAmount()) {
+                    if (Gui.getSuperPanelFromLst(curRow, curCol).getType() == type) {
+                        counter++;
+                        curCol++;
+                        curRow++;
+                    } else break;
+                } return counter;
 
+            case DOWN_LEFT:
+                curCol = col - 1;
+                curRow = row + 1;
+                while (curCol >= 0 && curRow < Gui.getRowsAmount()) {
+                    if (Gui.getSuperPanelFromLst(curRow, curCol).getType() == type) {
+                        counter++;
+                        curCol--;
+                        curRow++;
+                    } else break;
+                } return counter;
 
-
+            default: return -1;
         }
     }
 
-    public static int countLeft(int row, int col, Piece curType){
-        int counter = 0;
-        int i = col-1;
-        while (i >= 0){
-            if (Gui.getSuperPanelFromLst(row, i).getType() == curType) {
-                counter++;
-                i--;
-            }
-            else break;
-        } return counter;
+    static int countCol(int row, int col, Piece type){
+        return countPieces(row, col, type, Direction.DOWN);
     }
 
-    public static int countRight(int row, int col, Piece curType){
-        int counter = 0;
-        int i = col+1;
-        while (i <= Gui.getColsAmount()){
-            if (Gui.getSuperPanelFromLst(row, i).getType() == curType) {
-                counter++;
-                i++;
-            }
-            else break;
-        } return counter;
+    static int countRow(int row, int col, Piece type){
+        return countPieces(row, col, type, Direction.LEFT) + countPieces(row, col, type, Direction.RIGHT);
     }
 
-    public static int countUp(int row, int col, Piece curType){
-        int counter = 0;
-        int i = row-1;
-        while (i >= 0){
-            if (Gui.getSuperPanelFromLst(i, col).getType() == curType) {
-                counter++;
-                i--;
-            }
-            else break;
-        } return counter;
+    static int countForwardDiag(int row, int col, Piece type){
+        return countPieces(row, col, type, Direction.DOWN_LEFT) +
+                countPieces(row, col, type, Direction.UP_RIGHT);
     }
 
-    public static int countDown(int row, int col, Piece curType){
-        int counter = 0;
-        int i = row+1;
-        while (i <= Gui.getRowsAmount()){
-            if (Gui.getSuperPanelFromLst(i, col).getType() == curType) {
-                counter++;
-                i++;
-            }
-            else break;
-        } return counter;
+    static int countBackwardDiag(int row, int col, Piece type){
+        return countPieces(row, col, type, Direction.UP_LEFT) +
+                countPieces(row, col, type, Direction.DOWN_RIGHT);
+    }
+
+    static String getWinner(int row, int col, Piece type){
+        if (countCol(row, col, type) >= Gui.getAmountToWin()-1 ||
+                countRow(row, col, type) >= Gui.getAmountToWin()-1 ||
+                countForwardDiag(row, col, type) >= Gui.getAmountToWin()-1 ||
+                countBackwardDiag(row, col, type) >= Gui.getAmountToWin()-1){
+            return type.toString();
+        } return NO_WINNER;
+    }
+
+    static boolean isWin(int row, int col, Piece type){
+        String winner = getWinner(row, col, type);
+        if (winner.equals(NO_WINNER)) return false;
+        JOptionPane.showMessageDialog(Gui.getFrame(), String.format(WIN_MSG, winner));
+        return true;
     }
 }
