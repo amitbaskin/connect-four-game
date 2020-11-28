@@ -1,14 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
 
-
 enum Piece {GRAY, RED, BLUE}
 
-class SuperPanel extends JPanel{
+class PiecePanel extends JPanel{
     int PIECE_SIZE = 90;
     Piece type;
 
-    SuperPanel(Piece type){
+    PiecePanel(Piece type){
         this.type = type;
     }
 

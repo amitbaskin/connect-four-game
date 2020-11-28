@@ -4,11 +4,11 @@ import java.awt.event.ActionListener;
 abstract class GuiUtils {
     private static final String SCORE_MSG = "%s score: %d";
 
-    static void initializeSuperPanelLst() {
+    static void initializePiecePanelLst() {
         for (int i = 0; i < Gui.getRowsAmount(); i++) {
             for (int j = 0; j < Gui.getColsAmount(); j++) {
-                Gui.getSuperPanelLst()[i][j] = new SuperPanel(Piece.GRAY);
-                Gui.addComponent(Gui.getSuperPanelFromLst(i, j));
+                Gui.getPiecePanelLst()[i][j] = new PiecePanel(Piece.GRAY);
+                Gui.addComponent(Gui.getPiecePanelFromLst(i, j));
             }
         }
     }
@@ -39,7 +39,7 @@ abstract class GuiUtils {
     }
 
     static void updatePanel(int row, int col){
-        Gui.getSuperPanelLst()[row][col].setType(Gui.getCurPiece());
+        Gui.getPiecePanelLst()[row][col].setType(Gui.getCurPiece());
     }
 
     static void updatePiece(){
@@ -59,17 +59,17 @@ abstract class GuiUtils {
         btn.addActionListener(listener);
     }
 
-    static void restartAllSuperPanels(){
+    static void restartAllPiecePanels(){
         for (int i = 0; i < Gui.getRowsAmount(); i++) {
             for (int j = 0; j < Gui.getColsAmount(); j++) {
                 GuiUtils.initializeColumns();
-                GuiUtils.restartSuperPanelInLst(i, j);
+                GuiUtils.restartPiecePanelInLst(i, j);
             }
         } Gui.repaint();
     }
 
-    static void restartSuperPanelInLst(int row, int col){
-        Gui.getSuperPanelFromLst(row, col).setType(Piece.GRAY);
+    static void restartPiecePanelInLst(int row, int col){
+        Gui.getPiecePanelFromLst(row, col).setType(Piece.GRAY);
     }
 
     static void setButtonInLst(int index){

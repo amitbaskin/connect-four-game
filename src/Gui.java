@@ -1,7 +1,5 @@
-
 import javax.swing.*;
 import java.awt.*;
-
 
 public abstract class Gui {
     private static final int FRAME_SIZE = 1000;
@@ -10,7 +8,7 @@ public abstract class Gui {
     private static final int AMOUNT_TO_WIN = 4;
 
     private static final JFrame frame = new JFrame("Connect Four");
-    private static final SuperPanel[][] superPanelLst = new SuperPanel[6][7];
+    private static final PiecePanel[][] piecePanelLst = new PiecePanel[6][7];
     private static Piece curPiece = Piece.RED;
     private static final JButton[] btnLst = new JButton[7];
     private static final int[] nextRowOfColLst = new int[COLS_AMOUNT];
@@ -25,7 +23,7 @@ public abstract class Gui {
         getFrame().setLayout(new GridLayout(ROWS_AMOUNT + 2, COLS_AMOUNT));
 
         GuiUtils.initializeColumns();
-        GuiUtils.initializeSuperPanelLst();
+        GuiUtils.initializePiecePanelLst();
         GuiUtils.initializeButtons();
         GuiUtils.initializeClearButton();
         GuiUtils.initializeScores();
@@ -39,7 +37,7 @@ public abstract class Gui {
     static int getColsAmount() { return COLS_AMOUNT; }
     static int getRowsAmount() { return ROWS_AMOUNT; }
     static JFrame getFrame() { return frame; }
-    static SuperPanel[][] getSuperPanelLst() { return superPanelLst; }
+    static PiecePanel[][] getPiecePanelLst() { return piecePanelLst; }
     static Piece getCurPiece() { return curPiece; }
     static int[] getNextRowOfColLst() { return nextRowOfColLst; }
     static JButton[] getBtnLst() { return btnLst; }
@@ -55,7 +53,7 @@ public abstract class Gui {
     static void incrementRedScore(){ redScore += 1; }
     static void incrementBlueScore(){ blueScore += 1; }
     static int getNextRowOfColFromLst(int col){ return nextRowOfColLst[col]; }
-    static SuperPanel getSuperPanelFromLst(int row, int col){ return superPanelLst[row][col]; }
+    static PiecePanel getPiecePanelFromLst(int row, int col){ return piecePanelLst[row][col]; }
     static JButton getBtnFromLst(int i){ return btnLst[i]; }
     static void setCurPiece(Piece piece){ curPiece = piece; }
     static void decrementNextRowAtCol(int col){ nextRowOfColLst[col] -= 1; }

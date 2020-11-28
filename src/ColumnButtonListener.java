@@ -19,7 +19,7 @@ class ColumnButtonListener implements ActionListener {
         GuiUtils.updatePanel(curRow, getCol());
         Gui.getFrame().repaint();
         if(DetermineWin.isWin(Gui.getNextRowOfColFromLst(getCol()), getCol(), Gui.getCurPiece())){
-            GuiUtils.restartAllSuperPanels();
+            GuiUtils.restartAllPiecePanels();
             switch(Gui.getCurPiece()){
                 case RED:
                     GuiUtils.incrementRedScoreLabelText();
